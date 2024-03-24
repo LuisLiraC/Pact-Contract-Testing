@@ -1,24 +1,56 @@
-from fastapi import FastAPI, Header
+from fastapi import FastAPI, Header, status
 from fastapi.responses import JSONResponse
 from .database.db import get_db
-from .crud import books as books_crud
+from .crud import (
+    books as books_crud,
+    users as users_crud
+)
 from .schemas.book import (
     Book as BookSchema,
     CreateBook as CreateBookSchema
+)
+from .schemas.user import (
+    CreateUser as CreateUserSchema
 )
 
 app = FastAPI()
 
 
-@app.middleware("http")
-async def add_process_time_header(request, call_next):
-    if not request.headers.get("authorization"):
+# @app.middleware("http")
+# async def add_process_time_header(request, call_next):
+#     if not request.headers.get("authorization"):
+#         return JSONResponse(
+#             status_code=400,
+#             content={"message": "No authorization token"}
+#         )
+#
+#     return await call_next(request)
+
+
+@app.post("/signup/")
+def signup(user: CreateUserSchema):
+    db = next(get_db())
+    try:
+        db_user = users_crud.create_user(db, user)
+        return db_user
+    except ValueError as e:
         return JSONResponse(
-            status_code=400,
-            content={"message": "No authorization token"}
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"error": str(e)}
         )
 
-    return await call_next(request)
+
+@app.post("/signin/")
+def signin(user: CreateUserSchema):
+    db = next(get_db())
+    try:
+        db_user = users_crud.login_user(db, user.email, user.password)
+        return db_user
+    except ValueError as e:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"error": str(e)}
+        )
 
 
 @app.get("/")
