@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  web:
+    container_name: fastapi
+    networks:
+      - demo_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${FASTAPI_PORT:-8000}:${FASTAPI_PORT:-8000}"
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+    command: >
+      bash -c "wait-for-it --timeout=120 ${POSTGRES_HOST}:${POSTGRES_PORT} -- uvicorn app.main:app --host 0.0.0.0 --port ${FASTAPI_PORT:-8000} --reload"
+  db:
+    container_name: db
+    networks:
+      - demo_app
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./.data/db-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
+
+volumes:
+  db-data:
+
+networks:
+  demo_app:
+    driver: bridge
