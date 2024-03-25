@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from ..models.book import Book
-from ..schemas.book import CreateBook as CreateBookSchema
+from app.models.book import Book
+from app.schemas.book import CreateBook as CreateBookSchema
 
 
 def get_books(db: Session):

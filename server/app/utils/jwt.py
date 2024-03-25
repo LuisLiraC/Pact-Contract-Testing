@@ -1,6 +1,6 @@
 from jose import jwt
 from datetime import datetime, timedelta
-from ..settings import settings
+from app.settings import settings
 
 
 def create_jwt_token(data: dict):

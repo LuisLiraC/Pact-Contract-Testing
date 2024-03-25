@@ -1,15 +1,15 @@
 from fastapi import FastAPI, Header, status
 from fastapi.responses import JSONResponse
-from .database.db import get_db
-from .crud import (
+from app.database.db import get_db
+from app.crud import (
     books as books_crud,
     users as users_crud
 )
-from .schemas.book import (
+from app.schemas.book import (
     Book as BookSchema,
     CreateBook as CreateBookSchema
 )
-from .schemas.user import (
+from app.schemas.user import (
     CreateUser as CreateUserSchema
 )
 
