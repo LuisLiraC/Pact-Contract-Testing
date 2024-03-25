@@ -10,5 +10,4 @@ def read_env_file():
             if line and not line.startswith("#"):
                 key, value = line.split("=", 1)
                 env_vars[key.strip()] = value.strip()
-    print(env_vars)
     return env_vars
