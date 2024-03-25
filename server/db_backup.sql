@@ -55,6 +55,33 @@ ALTER SEQUENCE public.books_id_seq OWNED BY public.books.id;
 
 
 --
+-- Name: users; Type: TABLE; Schema: public; Owner: luislira
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    email character varying,
+    hashed_password text
+);
+
+
+ALTER TABLE public.users OWNER TO luislira;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: luislira
+--
+
+ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: books id; Type: DEFAULT; Schema: public; Owner: luislira
 --
 
@@ -72,10 +99,26 @@ COPY public.books (id, title) FROM stdin;
 
 
 --
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: luislira
+--
+
+COPY public.users (id, email, hashed_password) FROM stdin;
+7	luis@email.com	$2b$12$pzg7V2sNrrmwIhpELa7a1uiyWbszBLX.EuonzGAfMrJ/BkXjOALPC
+\.
+
+
+--
 -- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
 --
 
 SELECT pg_catalog.setval('public.books_id_seq', 2, true);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 7, true);
 
 
 --
@@ -84,6 +127,22 @@ SELECT pg_catalog.setval('public.books_id_seq', 2, true);
 
 ALTER TABLE ONLY public.books
     ADD CONSTRAINT books_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pk; Type: CONSTRAINT; Schema: public; Owner: luislira
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pk PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pk_2; Type: CONSTRAINT; Schema: public; Owner: luislira
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pk_2 UNIQUE (email);
 
 
 --

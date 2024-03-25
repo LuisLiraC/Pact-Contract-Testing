@@ -8,7 +8,7 @@ def backup_db():
     os.environ.update(env_vars)
     container_name = "db"
     database_name = os.getenv("POSTGRES_DB")
-    output_file = "../backup.sql"
+    output_file = os.path.join(os.path.dirname(__file__), "../db_backup.sql")
     user = os.getenv("POSTGRES_USER")
 
     command = f"docker exec {container_name} pg_dump -U {user} -d {database_name}"

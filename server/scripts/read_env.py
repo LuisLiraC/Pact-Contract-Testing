@@ -1,9 +1,14 @@
+import os
+
+
 def read_env_file():
     env_vars = {}
-    with open("../.env", "r") as f:
+    dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")
+    with open(dotenv_path, "r") as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith("#"):
                 key, value = line.split("=", 1)
                 env_vars[key.strip()] = value.strip()
+    print(env_vars)
     return env_vars

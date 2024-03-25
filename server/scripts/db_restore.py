@@ -13,7 +13,7 @@ if __name__ == "__main__":
     os.environ.update(env_vars)
     container_name = "db"
     database_name = os.getenv("POSTGRES_DB")
-    input_file = "../backup.sql"
+    input_file = os.path.join(os.path.dirname(__file__), "../db_backup.sql")
     postgres_user = os.getenv("POSTGRES_USER")
 
     restore_db(container_name, database_name, postgres_user, input_file)
