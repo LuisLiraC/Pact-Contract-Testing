@@ -56,7 +56,7 @@ def signup(user: IncomingUserSchema):
 def signin(user: IncomingUserSchema):
     try:
         db = next(get_db())
-        db_user = users_crud.login_user(db, user.email, user.password)
+        db_user = users_crud.login_user(db, user)
         token = create_jwt_token({"id": db_user.id})
         user_logged = UserLoggedSchema(token=token, user=db_user)
         return Response(data=user_logged)

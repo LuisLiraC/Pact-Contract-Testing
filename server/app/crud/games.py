@@ -1,17 +1,21 @@
+from typing import Type
 from sqlalchemy.orm import Session
 from app.models.game import Game
-from app.schemas.game import CreateGame as CreateGameSchema
+from app.schemas.game import (
+    Game as GameSchema,
+    CreateGame as CreateGameSchema
+)
 
 
-def get_games(db: Session):
+def get_games(db: Session) -> list[Type[GameSchema]]:
     return db.query(Game).all()
 
 
-def get_game(db: Session, game_id: int):
+def get_game(db: Session, game_id: int) -> GameSchema:
     return db.query(Game).filter(Game.id == game_id).first()
 
 
-def create_game(db: Session, game: CreateGameSchema):
+def create_game(db: Session, game: CreateGameSchema) -> GameSchema:
     db_game = Game(name=game.name)
     db.add(db_game)
     db.commit()
