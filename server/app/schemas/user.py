@@ -13,6 +13,11 @@ class UserInDB(User):
     hashed_password: str
 
 
-class CreateUser(BaseModel):
+class IncomingUser(BaseModel):
     email: str
     password: str
+
+
+class UserLogged(BaseModel):
+    token: str
+    user: User

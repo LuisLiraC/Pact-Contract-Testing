@@ -21,37 +21,56 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: books; Type: TABLE; Schema: public; Owner: luislira
+-- Name: favorites; Type: TABLE; Schema: public; Owner: luislira
 --
 
-CREATE TABLE public.books (
+CREATE TABLE public.favorites (
     id integer NOT NULL,
-    title character varying
+    user_id integer NOT NULL,
+    game_id integer NOT NULL
 );
 
 
-ALTER TABLE public.books OWNER TO luislira;
+ALTER TABLE public.favorites OWNER TO luislira;
 
 --
--- Name: books_id_seq; Type: SEQUENCE; Schema: public; Owner: luislira
+-- Name: favorites_id_seq; Type: SEQUENCE; Schema: public; Owner: luislira
 --
 
-CREATE SEQUENCE public.books_id_seq
-    AS integer
+ALTER TABLE public.favorites ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.favorites_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
-    CACHE 1;
+    CACHE 1
+);
 
-
-ALTER SEQUENCE public.books_id_seq OWNER TO luislira;
 
 --
--- Name: books_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luislira
+-- Name: games; Type: TABLE; Schema: public; Owner: luislira
 --
 
-ALTER SEQUENCE public.books_id_seq OWNED BY public.books.id;
+CREATE TABLE public.games (
+    id integer NOT NULL,
+    name character varying NOT NULL
+);
+
+
+ALTER TABLE public.games OWNER TO luislira;
+
+--
+-- Name: games_id_seq; Type: SEQUENCE; Schema: public; Owner: luislira
+--
+
+ALTER TABLE public.games ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.games_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
 
 
 --
@@ -82,19 +101,20 @@ ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
--- Name: books id; Type: DEFAULT; Schema: public; Owner: luislira
+-- Data for Name: favorites; Type: TABLE DATA; Schema: public; Owner: luislira
 --
 
-ALTER TABLE ONLY public.books ALTER COLUMN id SET DEFAULT nextval('public.books_id_seq'::regclass);
+COPY public.favorites (id, user_id, game_id) FROM stdin;
+\.
 
 
 --
--- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: luislira
+-- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: luislira
 --
 
-COPY public.books (id, title) FROM stdin;
-1	The Great Gatsby
-2	test
+COPY public.games (id, name) FROM stdin;
+1	The Legend of Zelda
+2	Super Mario Wonder
 \.
 
 
@@ -108,10 +128,17 @@ COPY public.users (id, email, hashed_password) FROM stdin;
 
 
 --
--- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
+-- Name: favorites_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
 --
 
-SELECT pg_catalog.setval('public.books_id_seq', 2, true);
+SELECT pg_catalog.setval('public.favorites_id_seq', 1, false);
+
+
+--
+-- Name: games_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
+--
+
+SELECT pg_catalog.setval('public.games_id_seq', 13, true);
 
 
 --
@@ -122,11 +149,27 @@ SELECT pg_catalog.setval('public.users_id_seq', 7, true);
 
 
 --
--- Name: books books_pkey; Type: CONSTRAINT; Schema: public; Owner: luislira
+-- Name: favorites favorites_pk; Type: CONSTRAINT; Schema: public; Owner: luislira
 --
 
-ALTER TABLE ONLY public.books
-    ADD CONSTRAINT books_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.favorites
+    ADD CONSTRAINT favorites_pk PRIMARY KEY (id);
+
+
+--
+-- Name: games games_pk; Type: CONSTRAINT; Schema: public; Owner: luislira
+--
+
+ALTER TABLE ONLY public.games
+    ADD CONSTRAINT games_pk PRIMARY KEY (id);
+
+
+--
+-- Name: games games_pk_2; Type: CONSTRAINT; Schema: public; Owner: luislira
+--
+
+ALTER TABLE ONLY public.games
+    ADD CONSTRAINT games_pk_2 UNIQUE (name);
 
 
 --
@@ -146,17 +189,19 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: ix_books_id; Type: INDEX; Schema: public; Owner: luislira
+-- Name: favorites favorites_games_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: luislira
 --
 
-CREATE INDEX ix_books_id ON public.books USING btree (id);
+ALTER TABLE ONLY public.favorites
+    ADD CONSTRAINT favorites_games_id_fk FOREIGN KEY (game_id) REFERENCES public.games(id);
 
 
 --
--- Name: ix_books_title; Type: INDEX; Schema: public; Owner: luislira
+-- Name: favorites favorites_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: luislira
 --
 
-CREATE INDEX ix_books_title ON public.books USING btree (title);
+ALTER TABLE ONLY public.favorites
+    ADD CONSTRAINT favorites_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --

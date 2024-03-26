@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.schemas.user import CreateUser as CreateUserSchema
+from app.schemas.user import IncomingUser as CreateUserSchema
 from passlib.context import CryptContext
 from app.utils.jwt import create_jwt_token
-
+from app.schemas.user import User as UserSchema
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -24,8 +24,7 @@ def login_user(db: Session, user_email: str, password: str):
     user = get_user(db, user_email)
     if not user or not verify_password(password, user.hashed_password):
         raise ValueError("Invalid credentials")
-    token = create_jwt_token({"id": user.id})
-    return {"token": token}
+    return UserSchema(id=user.id, email=user.email)
 
 
 def create_user(db: Session, user: CreateUserSchema):
@@ -37,5 +36,4 @@ def create_user(db: Session, user: CreateUserSchema):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    token = create_jwt_token({"id": db_user.id})
-    return {"token": token}
+    return UserSchema(id=db_user.id, email=db_user.email)
