@@ -4,7 +4,8 @@ from app.database.db import get_db
 from sqlalchemy import exc
 from app.crud import (
     games as games_crud,
-    users as users_crud
+    users as users_crud,
+    favorites as favorites_crud
 )
 from app.schemas.game import (
     Game as GameSchema,
@@ -13,6 +14,10 @@ from app.schemas.game import (
 from app.schemas.user import (
     IncomingUser as IncomingUserSchema,
     UserLogged as UserLoggedSchema
+)
+from app.schemas.favorite import (
+    Favorite as FavoriteSchema,
+    CreateFavorite as CreateFavoriteSchema
 )
 from app.schemas.response import Response
 from app.utils.jwt import create_jwt_token
@@ -107,6 +112,41 @@ def read_game(game_id: int):
             raise exc.NoResultFound
 
         return Response(data=game)
+    except exc.NoResultFound:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"error": "Game not found"}
+        )
+
+@app.get("/favorites/{user_id}", response_model=Response[FavoriteSchema], status_code=status.HTTP_200_OK)
+def read_favorites(user_id: int):
+    try:
+        db = next(get_db())
+        favorites = favorites_crud.get_favorites(db, user_id)
+
+        if not favorites:
+            raise exc.NoResultFound
+
+        return Response(data=favorites)
+    except exc.NoResultFound:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"error": "Favorites not found"}
+        )
+
+
+@app.post("/favorites/", response_model=Response[FavoriteSchema], status_code=status.HTTP_201_CREATED)
+def new_favorite(favorite: CreateFavoriteSchema):
+    try:
+        create_favorite = CreateFavoriteSchema(user_id=7, game_id=favorite.game_id)
+        db = next(get_db())
+        inserted_favorite = favorites_crud.create_favorite(db, create_favorite)
+        return Response(data=inserted_favorite)
+    except exc.IntegrityError:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"error": "Favorite already exists"}
+        )
     except exc.NoResultFound:
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
