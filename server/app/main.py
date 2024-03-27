@@ -23,20 +23,23 @@ from app.schemas.token import TokenData
 from app.schemas.response import Response
 from app.utils.jwt import create_jwt_token
 from app.utils.get_current_user import get_current_user
+from app.settings import settings
 
 
 app = FastAPI()
 
 
-# @app.middleware("http")
-# async def add_process_time_header(request, call_next):
-#     if not request.headers.get("authorization"):
-#         return JSONResponse(
-#             status_code=400,
-#             content={"message": "No authorization token"}
-#         )
-#
-#     return await call_next(request)
+@app.middleware("http")
+async def add_process_time_header(request, call_next):
+    if settings.IS_TEST_ENV:
+        custom_header = request.headers.get("x-puzzle")
+        if not custom_header or custom_header != "mellon":
+            return JSONResponse(
+                status_code=400,
+                content={"message": "You shall not pass!"}
+            )
+
+    return await call_next(request)
 
 
 @app.get("/")
