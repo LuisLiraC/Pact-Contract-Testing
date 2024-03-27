@@ -105,6 +105,9 @@ ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 --
 
 COPY public.favorites (id, user_id, game_id) FROM stdin;
+1	7	1
+8	7	2
+9	7	14
 \.
 
 
@@ -115,6 +118,7 @@ COPY public.favorites (id, user_id, game_id) FROM stdin;
 COPY public.games (id, name) FROM stdin;
 1	The Legend of Zelda
 2	Super Mario Wonder
+14	Pokemon Emerald
 \.
 
 
@@ -131,21 +135,21 @@ COPY public.users (id, email, hashed_password) FROM stdin;
 -- Name: favorites_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
 --
 
-SELECT pg_catalog.setval('public.favorites_id_seq', 1, false);
+SELECT pg_catalog.setval('public.favorites_id_seq', 9, true);
 
 
 --
 -- Name: games_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
 --
 
-SELECT pg_catalog.setval('public.games_id_seq', 13, true);
+SELECT pg_catalog.setval('public.games_id_seq', 14, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 7, true);
+SELECT pg_catalog.setval('public.users_id_seq', 9, true);
 
 
 --
@@ -170,6 +174,14 @@ ALTER TABLE ONLY public.games
 
 ALTER TABLE ONLY public.games
     ADD CONSTRAINT games_pk_2 UNIQUE (name);
+
+
+--
+-- Name: favorites unique_user_game; Type: CONSTRAINT; Schema: public; Owner: luislira
+--
+
+ALTER TABLE ONLY public.favorites
+    ADD CONSTRAINT unique_user_game UNIQUE (user_id, game_id);
 
 
 --
