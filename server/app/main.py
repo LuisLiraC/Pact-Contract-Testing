@@ -26,6 +26,11 @@ from app.utils.get_current_user import get_current_user
 from app.settings import settings
 
 
+if settings.RECREATE_DB:
+    from app.database.db import Base, engine
+    Base.metadata.create_all(bind=engine)
+
+
 app = FastAPI()
 
 

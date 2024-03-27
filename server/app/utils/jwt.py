@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from app.settings import settings
 from app.schemas.token import TokenData
 
+
 def create_jwt_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(hours=12)

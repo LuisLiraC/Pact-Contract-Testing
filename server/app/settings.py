@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     JWT_SECRET: str
     JWT_ALGORITHM: str
     IS_TEST_ENV: bool
+    RECREATE_DB: bool
 
     class Config:
         env_file = "../.env"
