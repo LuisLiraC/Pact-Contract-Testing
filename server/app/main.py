@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status
+from fastapi import FastAPI, status, Depends
 from fastapi.responses import JSONResponse
 from app.database.db import get_db
 from sqlalchemy import exc
@@ -19,8 +19,10 @@ from app.schemas.favorite import (
     Favorite as FavoriteSchema,
     CreateFavorite as CreateFavoriteSchema
 )
+from app.schemas.token import TokenData
 from app.schemas.response import Response
 from app.utils.jwt import create_jwt_token
+from app.utils.get_current_user import get_current_user
 
 
 app = FastAPI()
@@ -90,7 +92,7 @@ def read_games():
 
 
 @app.post("/games/", response_model=Response[GameSchema], status_code=status.HTTP_201_CREATED)
-def new_game(game: CreateGameSchema):
+def new_game(game: CreateGameSchema, _: TokenData = Depends(get_current_user)):
     try:
         db = next(get_db())
         inserted_game = games_crud.create_game(db, game)
@@ -103,7 +105,7 @@ def new_game(game: CreateGameSchema):
 
 
 @app.get("/games/{game_id}/", response_model=Response[GameSchema], status_code=status.HTTP_200_OK)
-def read_game(game_id: int):
+def read_game(game_id: int, _: TokenData = Depends(get_current_user)):
     try:
         db = next(get_db())
         game = games_crud.get_game(db, game_id)
@@ -118,11 +120,11 @@ def read_game(game_id: int):
             content={"error": "Game not found"}
         )
 
-@app.get("/favorites/{user_id}", response_model=Response[FavoriteSchema], status_code=status.HTTP_200_OK)
-def read_favorites(user_id: int):
+@app.get("/favorites/", response_model=Response[FavoriteSchema], status_code=status.HTTP_200_OK)
+def read_favorites(current_user: TokenData = Depends(get_current_user)):
     try:
         db = next(get_db())
-        favorites = favorites_crud.get_favorites(db, user_id)
+        favorites = favorites_crud.get_favorites(db, current_user.id)
 
         if not favorites:
             raise exc.NoResultFound
@@ -136,9 +138,9 @@ def read_favorites(user_id: int):
 
 
 @app.post("/favorites/", response_model=Response[FavoriteSchema], status_code=status.HTTP_201_CREATED)
-def new_favorite(favorite: CreateFavoriteSchema):
+def new_favorite(favorite: CreateFavoriteSchema, current_user: TokenData = Depends(get_current_user)):
     try:
-        create_favorite = CreateFavoriteSchema(user_id=7, game_id=favorite.game_id)
+        create_favorite = CreateFavoriteSchema(user_id=current_user.id, game_id=favorite.game_id)
         db = next(get_db())
         inserted_favorite = favorites_crud.create_favorite(db, create_favorite)
         return Response(data=inserted_favorite)
