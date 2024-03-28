@@ -16,7 +16,7 @@ def get_game(db: Session, game_id: int) -> GameSchema:
 
 
 def create_game(db: Session, game: CreateGameSchema) -> GameSchema:
-    db_game = Game(name=game.name)
+    db_game = Game(**game.dict())
     db.add(db_game)
     db.commit()
     db.refresh(db_game)
