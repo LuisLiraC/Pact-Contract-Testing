@@ -26,16 +26,10 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "x-riddle",
-						"value": "mellon",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"luis@email.com\",\r\n    \"password\": \"123456\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -73,13 +67,7 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "x-riddle",
-						"value": "mellon",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"email\": \"luis@email.com\",\r\n    \"password\": \"123456\"\r\n}",
