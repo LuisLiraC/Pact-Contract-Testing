@@ -37,11 +37,18 @@ app = FastAPI()
 @app.middleware("http")
 async def add_process_time_header(request, call_next):
     if settings.IS_TEST_ENV:
-        custom_header = request.headers.get("x-puzzle")
-        if not custom_header or custom_header != "mellon":
+        custom_header = request.headers.get("x-riddle")
+
+        if not custom_header:
             return JSONResponse(
                 status_code=400,
-                content={"message": "You shall not pass!"}
+                content={"message": "Missing x-riddle header"}
+            )
+
+        if custom_header != "mellon":
+            return JSONResponse(
+                status_code=400,
+                content={"message": "Speak friend and enter"}
             )
 
     return await call_next(request)
