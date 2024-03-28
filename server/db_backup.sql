@@ -26,8 +26,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.favorites (
     id integer NOT NULL,
-    user_id integer NOT NULL,
-    game_id integer NOT NULL
+    user_id integer,
+    game_id integer
 );
 
 
@@ -37,14 +37,22 @@ ALTER TABLE public.favorites OWNER TO luislira;
 -- Name: favorites_id_seq; Type: SEQUENCE; Schema: public; Owner: luislira
 --
 
-ALTER TABLE public.favorites ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.favorites_id_seq
+CREATE SEQUENCE public.favorites_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
-    CACHE 1
-);
+    CACHE 1;
+
+
+ALTER SEQUENCE public.favorites_id_seq OWNER TO luislira;
+
+--
+-- Name: favorites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luislira
+--
+
+ALTER SEQUENCE public.favorites_id_seq OWNED BY public.favorites.id;
 
 
 --
@@ -53,7 +61,11 @@ ALTER TABLE public.favorites ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 CREATE TABLE public.games (
     id integer NOT NULL,
-    name character varying NOT NULL
+    name character varying,
+    year integer,
+    thumbnail character varying,
+    primary_color character varying,
+    is_released boolean
 );
 
 
@@ -63,14 +75,22 @@ ALTER TABLE public.games OWNER TO luislira;
 -- Name: games_id_seq; Type: SEQUENCE; Schema: public; Owner: luislira
 --
 
-ALTER TABLE public.games ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.games_id_seq
+CREATE SEQUENCE public.games_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
-    CACHE 1
-);
+    CACHE 1;
+
+
+ALTER SEQUENCE public.games_id_seq OWNER TO luislira;
+
+--
+-- Name: games_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luislira
+--
+
+ALTER SEQUENCE public.games_id_seq OWNED BY public.games.id;
 
 
 --
@@ -80,7 +100,7 @@ ALTER TABLE public.games ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 CREATE TABLE public.users (
     id integer NOT NULL,
     email character varying,
-    hashed_password text
+    hashed_password character varying
 );
 
 
@@ -90,14 +110,43 @@ ALTER TABLE public.users OWNER TO luislira;
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: luislira
 --
 
-ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.users_id_seq
+CREATE SEQUENCE public.users_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
-    CACHE 1
-);
+    CACHE 1;
+
+
+ALTER SEQUENCE public.users_id_seq OWNER TO luislira;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luislira
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: favorites id; Type: DEFAULT; Schema: public; Owner: luislira
+--
+
+ALTER TABLE ONLY public.favorites ALTER COLUMN id SET DEFAULT nextval('public.favorites_id_seq'::regclass);
+
+
+--
+-- Name: games id; Type: DEFAULT; Schema: public; Owner: luislira
+--
+
+ALTER TABLE ONLY public.games ALTER COLUMN id SET DEFAULT nextval('public.games_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: luislira
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
@@ -105,9 +154,8 @@ ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 --
 
 COPY public.favorites (id, user_id, game_id) FROM stdin;
-1	7	1
-8	7	2
-9	7	14
+1	1	1
+2	1	3
 \.
 
 
@@ -115,10 +163,11 @@ COPY public.favorites (id, user_id, game_id) FROM stdin;
 -- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: luislira
 --
 
-COPY public.games (id, name) FROM stdin;
-1	The Legend of Zelda
-2	Super Mario Wonder
-14	Pokemon Emerald
+COPY public.games (id, name, year, thumbnail, primary_color, is_released) FROM stdin;
+1	The Legend of Zelda: Ocarina of time	1998	http://localhost/static/zelda_oot.png	#111	t
+2	Super Mario Wonder	2023	http://localhost/static/super_mario_wonder.jpg	#123456	t
+3	The Legend of Zelda: Breath of the wild	2017	http://localhost/static/zelda_botw.jpeg	#a1b2c3	t
+6	Kirby and the Forgotten Land	2022	http://localhost/static/kirby_fogotten_land.png	#0a0a0a	t
 \.
 
 
@@ -127,7 +176,7 @@ COPY public.games (id, name) FROM stdin;
 --
 
 COPY public.users (id, email, hashed_password) FROM stdin;
-7	luis@email.com	$2b$12$pzg7V2sNrrmwIhpELa7a1uiyWbszBLX.EuonzGAfMrJ/BkXjOALPC
+1	luis@email.com	$2b$12$LP.zdQNzMGgt.9/rmzZMSe74wNLpPi8wbJtlAe0bLZCjRuVLVTOjG
 \.
 
 
@@ -135,45 +184,37 @@ COPY public.users (id, email, hashed_password) FROM stdin;
 -- Name: favorites_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
 --
 
-SELECT pg_catalog.setval('public.favorites_id_seq', 9, true);
+SELECT pg_catalog.setval('public.favorites_id_seq', 2, true);
 
 
 --
 -- Name: games_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
 --
 
-SELECT pg_catalog.setval('public.games_id_seq', 14, true);
+SELECT pg_catalog.setval('public.games_id_seq', 7, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luislira
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 9, true);
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 
 
 --
--- Name: favorites favorites_pk; Type: CONSTRAINT; Schema: public; Owner: luislira
+-- Name: favorites favorites_pkey; Type: CONSTRAINT; Schema: public; Owner: luislira
 --
 
 ALTER TABLE ONLY public.favorites
-    ADD CONSTRAINT favorites_pk PRIMARY KEY (id);
+    ADD CONSTRAINT favorites_pkey PRIMARY KEY (id);
 
 
 --
--- Name: games games_pk; Type: CONSTRAINT; Schema: public; Owner: luislira
---
-
-ALTER TABLE ONLY public.games
-    ADD CONSTRAINT games_pk PRIMARY KEY (id);
-
-
---
--- Name: games games_pk_2; Type: CONSTRAINT; Schema: public; Owner: luislira
+-- Name: games games_pkey; Type: CONSTRAINT; Schema: public; Owner: luislira
 --
 
 ALTER TABLE ONLY public.games
-    ADD CONSTRAINT games_pk_2 UNIQUE (name);
+    ADD CONSTRAINT games_pkey PRIMARY KEY (id);
 
 
 --
@@ -185,35 +226,62 @@ ALTER TABLE ONLY public.favorites
 
 
 --
--- Name: users users_pk; Type: CONSTRAINT; Schema: public; Owner: luislira
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: luislira
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_pk PRIMARY KEY (id);
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
--- Name: users users_pk_2; Type: CONSTRAINT; Schema: public; Owner: luislira
+-- Name: ix_favorites_id; Type: INDEX; Schema: public; Owner: luislira
 --
 
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_pk_2 UNIQUE (email);
+CREATE INDEX ix_favorites_id ON public.favorites USING btree (id);
 
 
 --
--- Name: favorites favorites_games_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: luislira
+-- Name: ix_games_id; Type: INDEX; Schema: public; Owner: luislira
+--
+
+CREATE INDEX ix_games_id ON public.games USING btree (id);
+
+
+--
+-- Name: ix_games_name; Type: INDEX; Schema: public; Owner: luislira
+--
+
+CREATE UNIQUE INDEX ix_games_name ON public.games USING btree (name);
+
+
+--
+-- Name: ix_users_email; Type: INDEX; Schema: public; Owner: luislira
+--
+
+CREATE UNIQUE INDEX ix_users_email ON public.users USING btree (email);
+
+
+--
+-- Name: ix_users_id; Type: INDEX; Schema: public; Owner: luislira
+--
+
+CREATE INDEX ix_users_id ON public.users USING btree (id);
+
+
+--
+-- Name: favorites favorites_game_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: luislira
 --
 
 ALTER TABLE ONLY public.favorites
-    ADD CONSTRAINT favorites_games_id_fk FOREIGN KEY (game_id) REFERENCES public.games(id);
+    ADD CONSTRAINT favorites_game_id_fkey FOREIGN KEY (game_id) REFERENCES public.games(id);
 
 
 --
--- Name: favorites favorites_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: luislira
+-- Name: favorites favorites_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: luislira
 --
 
 ALTER TABLE ONLY public.favorites
-    ADD CONSTRAINT favorites_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT favorites_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
