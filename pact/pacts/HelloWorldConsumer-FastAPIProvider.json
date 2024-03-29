@@ -1,0 +1,43 @@
+{
+  "consumer": {
+    "name": "HelloWorldConsumer"
+  },
+  "interactions": [
+    {
+      "description": "A request to receive hello world",
+      "providerStates": [
+        {
+          "name": "Hello world"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/"
+      },
+      "response": {
+        "body": {
+          "Hello": "World"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "12.4.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.16",
+      "models": "1.1.19"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "FastAPIProvider"
+  }
+}
