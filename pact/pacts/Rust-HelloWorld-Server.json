@@ -1,0 +1,36 @@
+{
+  "consumer": {
+    "name": "Rust-HelloWorld"
+  },
+  "interactions": [
+    {
+      "description": "Hello World Request",
+      "request": {
+        "method": "GET",
+        "path": "/"
+      },
+      "response": {
+        "body": {
+          "Hello": "World"
+        },
+        "headers": {
+          "content-type": "application/json"
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "consumer": "1.1.2",
+      "mockserver": "1.2.5",
+      "models": "1.1.18"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "Server"
+  }
+}
