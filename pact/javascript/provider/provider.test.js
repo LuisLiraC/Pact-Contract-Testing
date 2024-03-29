@@ -7,7 +7,7 @@ describe('Pact Verification', () => {
       providerBaseUrl: 'http://localhost:8000',
       pactUrls: [
         path.resolve(process.cwd(), '../pacts/HelloWorldConsumer-FastAPIProvider.json'),
-        path.resolve(process.cwd(), '../pacts/GameConsumer-FastAPIProvider.json'),
+        path.resolve(process.cwd(), '../pacts/GameConsumer-FastAPIProvider.json')
       ],
     })
 
