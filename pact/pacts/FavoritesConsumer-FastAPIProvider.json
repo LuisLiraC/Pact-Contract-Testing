@@ -1,0 +1,145 @@
+{
+  "consumer": {
+    "name": "FavoritesConsumer"
+  },
+  "interactions": [
+    {
+      "description": "A request to add a game to favorites",
+      "providerStates": [
+        {
+          "name": "An existing user 2"
+        }
+      ],
+      "request": {
+        "body": {
+          "game_id": 1
+        },
+        "generators": {
+          "header": {
+            "Authorization": {
+              "expression": "Bearer ${token}",
+              "type": "ProviderState"
+            }
+          }
+        },
+        "headers": {
+          "Authorization": "Bearer token",
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {},
+          "header": {
+            "Authorization": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "POST",
+        "path": "/favorites/"
+      },
+      "response": {
+        "body": {
+          "data": {
+            "game": {
+              "id": 1,
+              "is_released": true,
+              "name": "Game 1",
+              "primary_color": "ff0000",
+              "thumbnail": "http://localhost/static/image.png",
+              "year": 2021
+            },
+            "id": 13
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.data.game.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data.game.is_released": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data.game.name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data.game.primary_color": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^[0-9a-fA-F]+$"
+                }
+              ]
+            },
+            "$.data.game.thumbnail": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "http://localhost/static/.*.(png|jpg|jpeg)"
+                }
+              ]
+            },
+            "$.data.game.year": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 201
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "12.4.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.16",
+      "models": "1.1.19"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "FastAPIProvider"
+  }
+}
