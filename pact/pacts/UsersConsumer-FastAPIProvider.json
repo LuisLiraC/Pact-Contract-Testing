@@ -4,10 +4,102 @@
   },
   "interactions": [
     {
+      "description": "A request to create a new user",
+      "providerStates": [
+        {
+          "name": "A new user with random number"
+        }
+      ],
+      "request": {
+        "body": {
+          "email": "email-123456@email.com",
+          "password": "123456"
+        },
+        "generators": {
+          "body": {
+            "$.email": {
+              "expression": "email-${randomNumber}@email.com",
+              "type": "ProviderState"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.email": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "POST",
+        "path": "/signup/"
+      },
+      "response": {
+        "body": {
+          "data": {
+            "token": "iloveorange",
+            "user": {
+              "email": "iloveorange",
+              "id": 13
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.data.token": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data.user": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data.user.email": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data.user.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 201
+      }
+    },
+    {
       "description": "A request to sign in",
       "providerStates": [
         {
-          "name": "An existing user"
+          "name": "An existing user 2"
         }
       ],
       "request": {

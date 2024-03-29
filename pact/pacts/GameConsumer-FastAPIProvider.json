@@ -7,7 +7,10 @@
       "description": "A request to receive a game by ID",
       "providerStates": [
         {
-          "name": "An existing user"
+          "name": "An existing user 2"
+        },
+        {
+          "name": "A state of games"
         }
       ],
       "request": {
@@ -98,6 +101,188 @@
             "$.data.year": {
               "combine": "AND",
               "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "A request to receive all games",
+      "providerStates": [
+        {
+          "name": "Un estado de los juegos"
+        },
+        {
+          "name": "A state of games"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/games/"
+      },
+      "response": {
+        "body": {
+          "data": [
+            {
+              "id": 1,
+              "is_released": true,
+              "name": "Game 1",
+              "primary_color": "ff0000",
+              "thumbnail": "http://localhost/static/image.png",
+              "year": 2021
+            },
+            {
+              "id": 1,
+              "is_released": true,
+              "name": "Game 1",
+              "primary_color": "ff0000",
+              "thumbnail": "http://localhost/static/image.png",
+              "year": 2021
+            },
+            {
+              "id": 1,
+              "is_released": true,
+              "name": "Game 1",
+              "primary_color": "ff0000",
+              "thumbnail": "http://localhost/static/image.png",
+              "year": 2021
+            },
+            {
+              "id": 1,
+              "is_released": true,
+              "name": "Game 1",
+              "primary_color": "ff0000",
+              "thumbnail": "http://localhost/static/image.png",
+              "year": 2021
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.data": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 4
+                }
+              ]
+            },
+            "$.data[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data[*].is_released": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data[*].name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data[*].primary_color": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^[0-9a-fA-F]+$"
+                },
+                {
+                  "match": "regex",
+                  "regex": "^[0-9a-fA-F]+$"
+                },
+                {
+                  "match": "regex",
+                  "regex": "^[0-9a-fA-F]+$"
+                },
+                {
+                  "match": "regex",
+                  "regex": "^[0-9a-fA-F]+$"
+                }
+              ]
+            },
+            "$.data[*].thumbnail": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "http://localhost/static/.*.(png|jpg|jpeg)"
+                },
+                {
+                  "match": "regex",
+                  "regex": "http://localhost/static/.*.(png|jpg|jpeg)"
+                },
+                {
+                  "match": "regex",
+                  "regex": "http://localhost/static/.*.(png|jpg|jpeg)"
+                },
+                {
+                  "match": "regex",
+                  "regex": "http://localhost/static/.*.(png|jpg|jpeg)"
+                }
+              ]
+            },
+            "$.data[*].year": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                },
+                {
+                  "match": "type"
+                },
                 {
                   "match": "type"
                 }

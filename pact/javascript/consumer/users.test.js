@@ -3,6 +3,7 @@ const axios = require('axios')
 const path = require('path')
 const { like, string, integer } = Matchers
 const { fromProviderState } = require("@pact-foundation/pact/src/v3/matchers");
+const { AN_EXISTING_USER } = require('../states/states')
 
 
 const pact = new PactV3({
@@ -20,37 +21,37 @@ const userData = {
 }
 
 describe('Users consumer', () => {
-  // it('should return new user data', () => {
-  //   pact
-  //     .given('A new user with random number')
-  //     .uponReceiving('A request to create a new user')
-  //     .withRequest({
-  //       method: 'POST',
-  //       path: '/signup/',
-  //       body: {
-  //         email: fromProviderState('email-${randomNumber}@email.com', 'email-123456@email.com'),
-  //         password: '123456',
-  //       }
-  //     })
-  //     .willRespondWith({
-  //       status: 201,
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: {
-  //         data: userData
-  //       }
-  //     })
-  //
-  //   return pact.executeTest(async (mockServer) => {
-  //     const data = { email: 'email-123456@email.com', password: '123456' }
-  //     await axios.post(`${mockServer.url}/signup/`, data)
-  //   })
-  // })
+  it('should return new user data', () => {
+    pact
+      .given('A new user with random number')
+      .uponReceiving('A request to create a new user')
+      .withRequest({
+        method: 'POST',
+        path: '/signup/',
+        body: {
+          email: fromProviderState('email-${randomNumber}@email.com', 'email-123456@email.com'),
+          password: '123456',
+        }
+      })
+      .willRespondWith({
+        status: 201,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {
+          data: userData
+        }
+      })
+
+    return pact.executeTest(async (mockServer) => {
+      const data = { email: 'email-123456@email.com', password: '123456' }
+      await axios.post(`${mockServer.url}/signup/`, data)
+    })
+  })
 
   it('should return user data after sign in', () => {
     pact
-      .given('An existing user')
+      .given(AN_EXISTING_USER)
       .uponReceiving('A request to sign in')
       .withRequest({
         method: 'POST',
