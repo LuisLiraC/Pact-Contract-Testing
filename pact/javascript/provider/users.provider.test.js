@@ -1,6 +1,6 @@
 const path = require('path')
 const { Verifier } = require('@pact-foundation/pact')
-const stateHandlers = require('../states/sharedStateHandlers')
+const stateHandlers = require('../states/userStateHandlers')
 
 describe('Pact Verification', () => {
   it('should validate the pact', () => {

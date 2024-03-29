@@ -4,16 +4,19 @@
   },
   "interactions": [
     {
-      "description": "A request to add a game to favorites",
+      "description": "A request to get all favorite games",
       "providerStates": [
         {
           "name": "An existing user 2"
+        },
+        {
+          "name": "With already added games",
+          "params": {
+            "game_id": 6
+          }
         }
       ],
       "request": {
-        "body": {
-          "game_id": 1
-        },
         "generators": {
           "header": {
             "Authorization": {
@@ -23,11 +26,9 @@
           }
         },
         "headers": {
-          "Authorization": "Bearer token",
-          "Content-Type": "application/json"
+          "Authorization": "Bearer token"
         },
         "matchingRules": {
-          "body": {},
           "header": {
             "Authorization": {
               "combine": "AND",
@@ -39,29 +40,40 @@
             }
           }
         },
-        "method": "POST",
+        "method": "GET",
         "path": "/favorites/"
       },
       "response": {
         "body": {
-          "data": {
-            "game": {
-              "id": 1,
-              "is_released": true,
-              "name": "Game 1",
-              "primary_color": "ff0000",
-              "thumbnail": "http://localhost/static/image.png",
-              "year": 2021
-            },
-            "id": 13
-          }
+          "data": [
+            {
+              "game": {
+                "id": 1,
+                "is_released": true,
+                "name": "Game 1",
+                "primary_color": "ff0000",
+                "thumbnail": "http://localhost/static/image.png",
+                "year": 2021
+              },
+              "id": 13
+            }
+          ]
         },
         "headers": {
           "Content-Type": "application/json"
         },
         "matchingRules": {
           "body": {
-            "$.data.game.id": {
+            "$.data": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$.data[*].game.id": {
               "combine": "AND",
               "matchers": [
                 {
@@ -69,7 +81,7 @@
                 }
               ]
             },
-            "$.data.game.is_released": {
+            "$.data[*].game.is_released": {
               "combine": "AND",
               "matchers": [
                 {
@@ -77,7 +89,7 @@
                 }
               ]
             },
-            "$.data.game.name": {
+            "$.data[*].game.name": {
               "combine": "AND",
               "matchers": [
                 {
@@ -85,7 +97,7 @@
                 }
               ]
             },
-            "$.data.game.primary_color": {
+            "$.data[*].game.primary_color": {
               "combine": "AND",
               "matchers": [
                 {
@@ -94,7 +106,7 @@
                 }
               ]
             },
-            "$.data.game.thumbnail": {
+            "$.data[*].game.thumbnail": {
               "combine": "AND",
               "matchers": [
                 {
@@ -103,7 +115,7 @@
                 }
               ]
             },
-            "$.data.game.year": {
+            "$.data[*].game.year": {
               "combine": "AND",
               "matchers": [
                 {
@@ -111,7 +123,7 @@
                 }
               ]
             },
-            "$.data.id": {
+            "$.data[*].id": {
               "combine": "AND",
               "matchers": [
                 {
@@ -123,7 +135,7 @@
           "header": {},
           "status": {}
         },
-        "status": 201
+        "status": 200
       }
     }
   ],

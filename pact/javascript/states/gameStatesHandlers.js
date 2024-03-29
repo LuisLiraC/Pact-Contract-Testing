@@ -1,7 +1,7 @@
-const sharedStateHandler = require('./sharedStateHandlers')
+const { stateHandlers: sharedStateHandlers } = require('./sharedStateHandlers')
 
 const stateHandler = {
-  ...sharedStateHandler,
+  ...sharedStateHandlers,
   'Un estado de los juegos': () => {
     console.log('Setting up a state of games')
   },

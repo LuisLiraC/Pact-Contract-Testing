@@ -1,6 +1,7 @@
 const {AN_EXISTING_USER} = require("./states");
 const axios = require("axios");
 
+const sharedContext ={}
 
 const stateHandlers = {
   [AN_EXISTING_USER]: async () => {
@@ -10,6 +11,8 @@ const stateHandlers = {
       password: '123456'
     }
     const { data } = await axios.post('http://localhost:8000/signup/', user)
+
+    sharedContext.token = data.data.token
 
     return Promise.resolve({
       email: user.email,
@@ -23,4 +26,7 @@ const stateHandlers = {
   }
 }
 
-module.exports = stateHandlers
+module.exports = {
+  stateHandlers,
+  sharedContext
+}

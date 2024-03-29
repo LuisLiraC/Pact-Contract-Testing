@@ -1,7 +1,7 @@
-const sharedStateHandler = require('./sharedStateHandlers')
+const { stateHandlers: sharedStateHandlers } = require('./sharedStateHandlers')
 
-const stateHandler = {
-  ...sharedStateHandler,
+const stateHandlers = {
+  ...sharedStateHandlers,
 }
 
-module.exports = stateHandler
+module.exports = stateHandlers
