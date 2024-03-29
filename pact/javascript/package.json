@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:consumer": "jest ./consumer",
-    "test:provider": "jest ./provider/users.provider.test.js"
+    "test:consumer": "jest ./consumer/%npm_config_consumer%.test.js",
+    "test:provider": "jest ./provider/%npm_config_provider%.provider.test.js"
   },
   "keywords": [],
   "author": "",
