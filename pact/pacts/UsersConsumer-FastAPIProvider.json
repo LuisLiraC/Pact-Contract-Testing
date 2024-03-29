@@ -1,0 +1,126 @@
+{
+  "consumer": {
+    "name": "UsersConsumer"
+  },
+  "interactions": [
+    {
+      "description": "A request to sign in",
+      "providerStates": [
+        {
+          "name": "An existing user"
+        }
+      ],
+      "request": {
+        "body": {
+          "email": "email@email.com",
+          "password": "123456"
+        },
+        "generators": {
+          "body": {
+            "$.email": {
+              "expression": "${email}",
+              "type": "ProviderState"
+            },
+            "$.password": {
+              "expression": "${password}",
+              "type": "ProviderState"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.email": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.password": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "POST",
+        "path": "/signin/"
+      },
+      "response": {
+        "body": {
+          "data": {
+            "token": "iloveorange",
+            "user": {
+              "email": "iloveorange",
+              "id": 13
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.data.token": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data.user": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data.user.email": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.data.user.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "12.4.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.16",
+      "models": "1.1.19"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "FastAPIProvider"
+  }
+}

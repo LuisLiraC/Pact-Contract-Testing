@@ -37,7 +37,7 @@ describe('Game consumer', () => {
 
   it('should return a game by ID', () => {
     pact
-      .given('A logged user with a valid token')
+      .given('An existing user')
       .uponReceiving('A request to receive a game by ID')
       .withRequest({
         method: 'GET',

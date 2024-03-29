@@ -50,7 +50,7 @@ describe('Users consumer', () => {
 
   it('should return user data after sign in', () => {
     pact
-      .given('User already exists')
+      .given('An existing user')
       .uponReceiving('A request to sign in')
       .withRequest({
         method: 'POST',
