@@ -5,7 +5,10 @@ describe('Pact Verification', () => {
   it('should validate the pact', () => {
     const verifier = new Verifier({
       providerBaseUrl: 'http://localhost:8000',
-      pactUrls: [path.resolve(process.cwd(), '../pacts/HelloWorldConsumer-FastAPIProvider.json')],
+      pactUrls: [
+        path.resolve(process.cwd(), '../pacts/HelloWorldConsumer-FastAPIProvider.json'),
+        path.resolve(process.cwd(), '../pacts/GameConsumer-FastAPIProvider.json'),
+      ],
     })
 
     return verifier.verifyProvider()
