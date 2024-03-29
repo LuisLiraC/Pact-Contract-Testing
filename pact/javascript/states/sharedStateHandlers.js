@@ -6,11 +6,16 @@ const sharedContext ={}
 const stateHandlers = {
   [AN_EXISTING_USER]: async () => {
     const randomNumber = Math.floor(Math.random() * 100000)
+    const config = {
+      headers: {
+        'x-riddle': 'mellon',
+      },
+    }
     const user = {
       email: `email-provider-${randomNumber}@email.com`,
       password: '123456'
     }
-    const { data } = await axios.post('http://localhost:8000/signup/', user)
+    const { data } = await axios.post('http://localhost:8000/signup/', user, config)
 
     sharedContext.token = data.data.token
 

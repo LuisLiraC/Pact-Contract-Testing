@@ -7,7 +7,8 @@ const stateHandler = {
     const data = { game_id: params.game_id }
     const config = {
       headers: {
-        Authorization: `Bearer ${sharedContext.token}`
+        Authorization: `Bearer ${sharedContext.token}`,
+        'x-riddle': 'mellon',
       },
     }
     console.log('Adding a game to favorites')
