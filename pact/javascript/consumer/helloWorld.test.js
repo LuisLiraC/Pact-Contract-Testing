@@ -1,6 +1,7 @@
 const { PactV3, Matchers } = require('@pact-foundation/pact')
 const axios = require('axios')
 const path = require('path')
+const { string, integer } = Matchers
 
 
 const pact = new PactV3({
@@ -24,7 +25,7 @@ describe('Hello world', () => {
           'Content-Type': 'application/json',
         },
         body: {
-          "Hello": "World"
+          "Hello": string('world'),
         }
       })
 

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:consumer": "jest ./consumer"
+    "test:consumer": "jest ./consumer",
+    "test:provider": "jest ./provider"
   },
   "keywords": [],
   "author": "",

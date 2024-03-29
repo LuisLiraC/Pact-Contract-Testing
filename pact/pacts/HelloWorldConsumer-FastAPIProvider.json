@@ -16,10 +16,24 @@
       },
       "response": {
         "body": {
-          "Hello": "World"
+          "Hello": "world"
         },
         "headers": {
           "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.Hello": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
         },
         "status": 200
       }
