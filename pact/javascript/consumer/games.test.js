@@ -66,4 +66,63 @@ describe('Game consumer', () => {
       })
     })
   });
+
+  /**
+   * Abajo se agregan los tests para los casos de error o casos negativos
+   * estos tests también son necesarios para asegurarnos que nuestro proveedor
+   * cumple con la especificación que definimos en nuestro contrato.
+   */
+  it('should return 401 when token is invalid', () => {
+    pact
+      .given('An invalid token')
+      .uponReceiving('A request to receive a game by ID with invalid token')
+      .withRequest({
+        method: 'GET',
+        path: '/games/1/',
+        headers: {
+          'Authorization': 'Bearer invalidToken'
+        }
+      })
+      .willRespondWith({
+        status: 401,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+
+    return pact.executeTest(async (mockServer) => {
+      const config = {
+        headers: { 'Authorization': 'Bearer invalidToken' }
+      }
+      try {
+        await axios.get(`${mockServer.url}/games/1/`, config)
+      } catch (error) {
+        return error
+      }
+    })
+  })
+
+  it('should return 403 when token is missing', () => {
+    pact
+      .given('A missing token')
+      .uponReceiving('A request to receive a game by ID with missing token')
+      .withRequest({
+        method: 'GET',
+        path: '/games/1/',
+      })
+      .willRespondWith({
+        status: 403,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+
+    return pact.executeTest(async (mockServer) => {
+      try {
+        await axios.get(`${mockServer.url}/games/1/`)
+      } catch (error) {
+        return error
+      }
+    })
+  })
 });

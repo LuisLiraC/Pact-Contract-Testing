@@ -4,6 +4,24 @@
   },
   "interactions": [
     {
+      "description": "A request to receive a game by ID with missing token",
+      "providerStates": [
+        {
+          "name": "A missing token"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/games/1/"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 403
+      }
+    },
+    {
       "description": "A request to receive a game by ID",
       "providerStates": [
         {
@@ -111,6 +129,27 @@
           "status": {}
         },
         "status": 200
+      }
+    },
+    {
+      "description": "A request to receive a game by ID with invalid token",
+      "providerStates": [
+        {
+          "name": "An invalid token"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Authorization": "Bearer invalidToken"
+        },
+        "method": "GET",
+        "path": "/games/1/"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 401
       }
     },
     {
